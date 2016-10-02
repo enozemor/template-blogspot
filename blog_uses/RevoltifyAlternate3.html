@@ -1379,162 +1379,162 @@
         </style>
         <script type='text/javascript'>
             //<![CDATA[
-                imgr = new Array();
-                imgr[0] = "http://2.bp.blogspot.com/-ex3V86fj4dQ/UrCQQa4cLsI/AAAAAAAAFdA/j2FCTmGOrog/s1600/no-thumbnail.png";
-                showRandomImg = true;
-                aBold = true;
-                summaryPost = 400;
-                summaryTitle = 20;
-                numposts1 = 12;
-                numposts2 = 4;
-                function removeHtmlTag(strx, chop) {
-                    var s = strx.split("<");
-                    for (var i = 0; i < s.length; i++) {
-                        if (s[i].indexOf(">") != -1) {
-                            s[i] = s[i].substring(s[i].indexOf(">") + 1, s[i].length)
-                        }
+            imgr = new Array();
+            imgr[0] = "http://2.bp.blogspot.com/-ex3V86fj4dQ/UrCQQa4cLsI/AAAAAAAAFdA/j2FCTmGOrog/s1600/no-thumbnail.png";
+            showRandomImg = true;
+            aBold = true;
+            summaryPost = 400;
+            summaryTitle = 20;
+            numposts1 = 22;
+            numposts2 = 4;
+            function removeHtmlTag(strx, chop) {
+                var s = strx.split("<");
+                for (var i = 0; i < s.length; i++) {
+                    if (s[i].indexOf(">") != -1) {
+                        s[i] = s[i].substring(s[i].indexOf(">") + 1, s[i].length)
                     }
-                    s = s.join("");
-                    s = s.substring(0, chop - 1);
-                    return s
                 }
-                function showrecentposts1(json) {
-                    j = (showRandomImg) ? Math.floor((imgr.length + 1) * Math.random()) : 0;
-                    img = new Array();
-                    if (numposts2 <= json.feed.entry.length) {
-                        maxpost = numposts2
-                    } else {
-                        maxpost = json.feed.entry.length
+                s = s.join("");
+                s = s.substring(0, chop - 1);
+                return s
+            }
+            function showrecentposts1(json) {
+                j = (showRandomImg) ? Math.floor((imgr.length + 1) * Math.random()) : 0;
+                img = new Array();
+                if (numposts2 <= json.feed.entry.length) {
+                    maxpost = numposts2
+                } else {
+                    maxpost = json.feed.entry.length
+                }
+                for (var i = 0; i < maxpost; i++) {
+                    var entry = json.feed.entry[i];
+                    var posttitle = entry.title.$t;
+                    var pcm;
+                    var posturl;
+                    if (i == json.feed.entry.length)break;
+                    for (var k = 0; k < entry.link.length; k++) {
+                        if (entry.link[k].rel == 'alternate') {
+                            posturl = entry.link[k].href;
+                            break
+                        }
                     }
-                    for (var i = 0; i < maxpost; i++) {
-                        var entry = json.feed.entry[i];
-                        var posttitle = entry.title.$t;
-                        var pcm;
-                        var posturl;
-                        if (i == json.feed.entry.length)break;
-                        for (var k = 0; k < entry.link.length; k++) {
-                            if (entry.link[k].rel == 'alternate') {
-                                posturl = entry.link[k].href;
-                                break
-                            }
+                    for (var k = 0; k < entry.link.length; k++) {
+                        if (entry.link[k].rel == 'replies' && entry.link[k].type == 'text/html') {
+                            pcm = entry.link[k].title.split(" ")[0];
+                            break
                         }
-                        for (var k = 0; k < entry.link.length; k++) {
-                            if (entry.link[k].rel == 'replies' && entry.link[k].type == 'text/html') {
-                                pcm = entry.link[k].title.split(" ")[0];
-                                break
-                            }
+                    }
+                    if ("content" in entry) {
+                        var postcontent = entry.content.$t
+                    } else if ("summary" in entry) {
+                        var postcontent = entry.summary.$t
+                    } else var postcontent = "";
+                    postdate = entry.published.$t;
+                    if (j > imgr.length - 1)j = 0;
+                    img[i] = imgr[j];
+                    s = postcontent;
+                    a = s.indexOf("<img");
+                    b = s.indexOf("src=\"", a);
+                    c = s.indexOf("\"", b + 5);
+                    d = s.substr(b + 5, c - b - 5);
+                    if ((a != -1) && (b != -1) && (c != -1) && (d != ""))img[i] = d;
+                    var month = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+                    var month2 = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                    var day = postdate.split("-")[2].substring(0, 2);
+                    var m = postdate.split("-")[1];
+                    var y = postdate.split("-")[0];
+                    for (var u2 = 0; u2 < month.length; u2++) {
+                        if (parseInt(m) == month[u2]) {
+                            m = month2[u2];
+                            break
                         }
-                        if ("content" in entry) {
-                            var postcontent = entry.content.$t
-                        } else if ("summary" in entry) {
-                            var postcontent = entry.summary.$t
-                        } else var postcontent = "";
-                        postdate = entry.published.$t;
-                        if (j > imgr.length - 1)j = 0;
-                        img[i] = imgr[j];
-                        s = postcontent;
+                    }
+                    var daystr = day + ' ' + m + ' ' + y;
+                    pcm = '<a href="' + posturl + '">' + pcm + ' comments</a>';
+                    var trtd = '<div class="col_maskolis"><h2 class="posttitle"><a href="' + posturl + '">' + posttitle + '</a></h2><a href="' + posturl + '"><img class="related_img" src="' + img[i] + '"/></a><div class="clear"></div></div>';
+                    document.write(trtd);
+                    j++
+                }
+            }
+            var relatedTitles = new Array();
+            var relatedTitlesNum = 0;
+            var relatedUrls = new Array();
+            var thumburl = new Array();
+            function related_results_labels_thumbs(json) {
+                for (var i = 0; i < json.feed.entry.length; i++) {
+                    var entry = json.feed.entry[i];
+                    relatedTitles[relatedTitlesNum] = entry.title.$t;
+                    try {
+                        thumburl[relatedTitlesNum] = entry.gform_foot.url
+                    } catch (error) {
+                        s = entry.content.$t;
                         a = s.indexOf("<img");
                         b = s.indexOf("src=\"", a);
                         c = s.indexOf("\"", b + 5);
                         d = s.substr(b + 5, c - b - 5);
-                        if ((a != -1) && (b != -1) && (c != -1) && (d != ""))img[i] = d;
-                        var month = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-                        var month2 = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-                        var day = postdate.split("-")[2].substring(0, 2);
-                        var m = postdate.split("-")[1];
-                        var y = postdate.split("-")[0];
-                        for (var u2 = 0; u2 < month.length; u2++) {
-                            if (parseInt(m) == month[u2]) {
-                                m = month2[u2];
-                                break
-                            }
-                        }
-                        var daystr = day + ' ' + m + ' ' + y;
-                        pcm = '<a href="' + posturl + '">' + pcm + ' comments</a>';
-                        var trtd = '<div class="col_maskolis"><h2 class="posttitle"><a href="' + posturl + '">' + posttitle + '</a></h2><a href="' + posturl + '"><img class="related_img" src="' + img[i] + '"/></a><div class="clear"></div></div>';
-                        document.write(trtd);
-                        j++
+                        if ((a != -1) && (b != -1) && (c != -1) && (d != "")) {
+                            thumburl[relatedTitlesNum] = d
+                        } else thumburl[relatedTitlesNum] = 'http://2.bp.blogspot.com/-ex3V86fj4dQ/UrCQQa4cLsI/AAAAAAAAFdA/j2FCTmGOrog/s1600/no-thumbnail.png'
                     }
-                }
-                var relatedTitles = new Array();
-                var relatedTitlesNum = 0;
-                var relatedUrls = new Array();
-                var thumburl = new Array();
-                function related_results_labels_thumbs(json) {
-                    for (var i = 0; i < json.feed.entry.length; i++) {
-                        var entry = json.feed.entry[i];
-                        relatedTitles[relatedTitlesNum] = entry.title.$t;
-                        try {
-                            thumburl[relatedTitlesNum] = entry.gform_foot.url
-                        } catch (error) {
-                            s = entry.content.$t;
-                            a = s.indexOf("<img");
-                            b = s.indexOf("src=\"", a);
-                            c = s.indexOf("\"", b + 5);
-                            d = s.substr(b + 5, c - b - 5);
-                            if ((a != -1) && (b != -1) && (c != -1) && (d != "")) {
-                                thumburl[relatedTitlesNum] = d
-                            } else thumburl[relatedTitlesNum] = 'http://2.bp.blogspot.com/-ex3V86fj4dQ/UrCQQa4cLsI/AAAAAAAAFdA/j2FCTmGOrog/s1600/no-thumbnail.png'
-                        }
-                        for (var k = 0; k < entry.link.length; k++) {
-                            if (entry.link[k].rel == 'alternate') {
-                                relatedUrls[relatedTitlesNum] = entry.link[k].href;
-                                relatedTitlesNum++
-                            }
+                    for (var k = 0; k < entry.link.length; k++) {
+                        if (entry.link[k].rel == 'alternate') {
+                            relatedUrls[relatedTitlesNum] = entry.link[k].href;
+                            relatedTitlesNum++
                         }
                     }
                 }
-                function removeRelatedDuplicates_thumbs() {
-                    var tmp = new Array(0);
-                    var tmp2 = new Array(0);
-                    var tmp3 = new Array(0);
-                    for (var i = 0; i < relatedUrls.length; i++) {
-                        if (!contains_thumbs(tmp, relatedUrls[i])) {
-                            tmp.length += 1;
-                            tmp[tmp.length - 1] = relatedUrls[i];
-                            tmp2.length += 1;
-                            tmp3.length += 1;
-                            tmp2[tmp2.length - 1] = relatedTitles[i];
-                            tmp3[tmp3.length - 1] = thumburl[i]
-                        }
+            }
+            function removeRelatedDuplicates_thumbs() {
+                var tmp = new Array(0);
+                var tmp2 = new Array(0);
+                var tmp3 = new Array(0);
+                for (var i = 0; i < relatedUrls.length; i++) {
+                    if (!contains_thumbs(tmp, relatedUrls[i])) {
+                        tmp.length += 1;
+                        tmp[tmp.length - 1] = relatedUrls[i];
+                        tmp2.length += 1;
+                        tmp3.length += 1;
+                        tmp2[tmp2.length - 1] = relatedTitles[i];
+                        tmp3[tmp3.length - 1] = thumburl[i]
                     }
-                    relatedTitles = tmp2;
-                    relatedUrls = tmp;
-                    thumburl = tmp3
                 }
-                function contains_thumbs(a, e) {
-                    for (var j = 0; j < a.length; j++)if (a[j] == e)return true;
-                    return false
-                }
-                function printRelatedLabels_thumbs() {
-                    for (var i = 0; i < relatedUrls.length; i++) {
-                        if ((relatedUrls[i] == currentposturl) || (!(relatedTitles[i]))) {
-                            relatedUrls.splice(i, 1);
-                            relatedTitles.splice(i, 1);
-                            thumburl.splice(i, 1);
-                            i--
-                        }
+                relatedTitles = tmp2;
+                relatedUrls = tmp;
+                thumburl = tmp3
+            }
+            function contains_thumbs(a, e) {
+                for (var j = 0; j < a.length; j++)if (a[j] == e)return true;
+                return false
+            }
+            function printRelatedLabels_thumbs() {
+                for (var i = 0; i < relatedUrls.length; i++) {
+                    if ((relatedUrls[i] == currentposturl) || (!(relatedTitles[i]))) {
+                        relatedUrls.splice(i, 1);
+                        relatedTitles.splice(i, 1);
+                        thumburl.splice(i, 1);
+                        i--
                     }
-                    var r = Math.floor((relatedTitles.length - 1) * Math.random());
-                    var i = 0;
-                    if (relatedTitles.length > 0)document.write('<h2>' + relatedpoststitle + '</h2>');
-                    document.write('<div style="clear: both;"/>');
-                    while (i < relatedTitles.length && i < 20 && i < maxresults) {
-                        document.write('<a class="related-post-link"');
-                        if (i != 0)document.write('"'); else document.write('"');
-                        document.write(' href="' + relatedUrls[r] + '" title="'+ relatedTitles[r] +'"><img class="related_img" src="' + thumburl[r] + '"/><br/><div id="related-title">' + relatedTitles[r] + '</div></a>');
-                        if (r < relatedTitles.length - 1) {
-                            r++
-                        } else {
-                            r = 0
-                        }
-                        i++
-                    }
-                    document.write('</div>');
-                    relatedUrls.splice(0, relatedUrls.length);
-                    thumburl.splice(0, thumburl.length);
-                    relatedTitles.splice(0, relatedTitles.length)
                 }
+                var r = Math.floor((relatedTitles.length - 1) * Math.random());
+                var i = 0;
+                if (relatedTitles.length > 0)document.write('<h2>' + relatedpoststitle + '</h2>');
+                document.write('<div style="clear: both;"/>');
+                while (i < relatedTitles.length && i < 20 && i < maxresults) {
+                    document.write('<a class="related-post-link"');
+                    if (i != 0)document.write('"'); else document.write('"');
+                    document.write(' href="' + relatedUrls[r] + '" title="'+ relatedTitles[r] +'"><img class="related_img" src="' + thumburl[r] + '"/><br/><div id="related-title">' + relatedTitles[r] + '</div></a>');
+                    if (r < relatedTitles.length - 1) {
+                        r++
+                    } else {
+                        r = 0
+                    }
+                    i++
+                }
+                document.write('</div>');
+                relatedUrls.splice(0, relatedUrls.length);
+                thumburl.splice(0, thumburl.length);
+                relatedTitles.splice(0, relatedTitles.length)
+            }
             //]]>
         </script>
     </b:if>
@@ -1790,7 +1790,7 @@
     <div id='content-wrapper'>
 
         <b:section class='banner section' id='banner' maxwidgets='1' showaddelement='yes'>
-            <b:widget id='AdSense2' locked='false' title='' type='AdSense' visible='true'>
+            <b:widget id='AdSense2' locked='false' title='' type='AdSense' version='1' visible='true'>
                 <b:includable id='main'>
                     <div class='widget-content'>
                         <data:adCode/>
@@ -2556,8 +2556,8 @@
                             <div class='pagenav'>
                                 <script type='text/javascript'>
                                     var pageNaviConf = {
-                                                perPage: 6,
-                                                numPages: 5,
+                                                perPage: 12,
+                                                numPages: 8,
                                                 firstText: &quot;First&quot;,
                                     lastText: &quot;Last&quot;,
                                     nextText: &quot;Next&quot;,
@@ -2778,7 +2778,7 @@
                                         </b:if>
 
                                         <b:if cond='data:blog.pageType == &quot;item&quot;'>
-                                            <div id='related-posts' class="related-post">
+                                            <div class='related-post' id='related-posts'>
                                                 <b:loop values='data:post.labels' var='label'>
                                                     <b:if cond='data:label.isLast != &quot;true&quot;'>
                                                     </b:if>
@@ -3166,16 +3166,73 @@
 
                 <div class='tabs tabs-1'>
                     <b:section class='tably tably-1 section' id='tably-1' showaddelement='yes'>
-                        <b:widget id='HTML96' locked='false' title='Recent' type='HTML' version='1' visible='true'>
+                        <b:widget id='BlogArchive1' locked='false' title='블로그 보관함' type='BlogArchive' version='1' visible='true'>
                             <b:includable id='main'>
-                                <!-- only display title if it's non-empty -->
                                 <b:if cond='data:title != &quot;&quot;'>
-                                    <h3 class='title'><data:title/></h3>
+                                    <h2><data:title/></h2>
                                 </b:if>
                                 <div class='widget-content'>
-                                    <data:content/>
+                                    <div id='ArchiveList'>
+                                        <div expr:id='data:widget.instanceId + &quot;_ArchiveList&quot;'>
+                                            <b:include cond='data:style == &quot;HIERARCHY&quot;' data='data' name='interval'/>
+                                            <b:include cond='data:style == &quot;FLAT&quot;' data='data' name='flat'/>
+                                            <b:include cond='data:style == &quot;MENU&quot;' data='data' name='menu'/>
+                                        </div>
+                                    </div>
+                                    <b:include name='quickedit'/>
                                 </div>
-
+                            </b:includable>
+                            <b:includable id='flat' var='data'>
+                                <ul class='flat'>
+                                    <b:loop values='data:data' var='i'>
+                                        <li class='archivedate'>
+                                            <a expr:href='data:i.url'><data:i.name/></a> (<data:i.post-count/>)
+                                        </li>
+                                    </b:loop>
+                                </ul>
+                            </b:includable>
+                            <b:includable id='interval' var='intervalData'>
+                                <b:loop values='data:intervalData' var='interval'>
+                                    <ul class='hierarchy'>
+                                        <li expr:class='&quot;archivedate &quot; + data:interval.expclass'>
+                                            <b:include cond='data:interval.toggleId' data='interval' name='toggle'/>
+                                            <a class='post-count-link' expr:href='data:interval.url'>
+                                                <data:interval.name/>
+                                            </a>
+                                            <span class='post-count' dir='ltr'>(<data:interval.post-count/>)</span>
+                                            <b:include cond='data:interval.data' data='interval.data' name='interval'/>
+                                            <b:include cond='data:interval.posts' data='interval.posts' name='posts'/>
+                                        </li>
+                                    </ul>
+                                </b:loop>
+                            </b:includable>
+                            <b:includable id='menu' var='data'>
+                                <select expr:id='data:widget.instanceId + &quot;_ArchiveMenu&quot;'>
+                                    <option value=''><data:title/></option>
+                                    <b:loop values='data:data' var='i'>
+                                        <option expr:value='data:i.url'><data:i.name/> (<data:i.post-count/>)</option>
+                                    </b:loop>
+                                </select>
+                            </b:includable>
+                            <b:includable id='posts' var='posts'>
+                                <ul class='posts'>
+                                    <b:loop values='data:posts' var='post'>
+                                        <li><a expr:href='data:post.url'><data:post.title/></a></li>
+                                    </b:loop>
+                                </ul>
+                            </b:includable>
+                            <b:includable id='toggle' var='interval'>
+                                <a class='toggle' href='javascript:void(0)'>
+    <span expr:class='&quot;zippy&quot; + (data:interval.expclass == &quot;expanded&quot; ? &quot; toggle-open&quot; : &quot;&quot;)'>
+      <b:if cond='data:interval.expclass == &quot;expanded&quot;'>
+        &#9660;&#160;
+      <b:elseif cond='data:blog.languageDirection == &quot;rtl&quot;'/>
+        &#9668;&#160;
+      <b:else/>
+        &#9658;&#160;
+      </b:if>
+    </span>
+                                </a>
                             </b:includable>
                         </b:widget>
                     </b:section>
@@ -3234,7 +3291,7 @@
                         </b:widget>
                     </b:section>
                     <b:section class='tably tably-3 section' id='tably-3' showaddelement='yes'>
-                        <b:widget id='HTML97' locked='false' title='Comment' type='HTML' version='1' visible='true'>
+                        <b:widget id='HTML96' locked='false' title='Recent' type='HTML' version='1' visible='true'>
                             <b:includable id='main'>
                                 <!-- only display title if it's non-empty -->
                                 <b:if cond='data:title != &quot;&quot;'>
@@ -3258,7 +3315,7 @@
 
 
                 <b:section class='sidebar2 section' id='sidebar2' preferred='yes'>
-                    <b:widget id='Translate2' locked='false' title='번역 - Translate' type='Translate' visible='true'>
+                    <b:widget id='Translate2' locked='false' title='번역 - Translate' type='Translate' version='1' visible='true'>
                         <b:includable id='main'>
                             <b:if cond='data:title != &quot;&quot;'>
                                 <h2 class='title'><data:title/></h2>
@@ -3277,7 +3334,7 @@
                             <b:include name='quickedit'/>
                         </b:includable>
                     </b:widget>
-                    <b:widget id='CustomSearch1' locked='false' title='이 블로그 검색' type='CustomSearch' visible='true'>
+                    <b:widget id='CustomSearch1' locked='false' title='이 블로그 검색' type='CustomSearch' version='1' visible='true'>
                         <b:includable id='main'>
                             <!-- only display title if it's non-empty -->
                             <b:if cond='data:title != &quot;&quot;'>
@@ -3352,7 +3409,7 @@
                             <b:include name='quickedit'/>
                         </b:includable>
                     </b:widget>
-                    <b:widget id='AdSense3' locked='false' title='' type='AdSense' visible='true'>
+                    <b:widget id='AdSense3' locked='false' title='' type='AdSense' version='1' visible='true'>
                         <b:includable id='main'>
                             <div class='widget-content'>
                                 <data:adCode/>
@@ -3360,76 +3417,7 @@
                             </div>
                         </b:includable>
                     </b:widget>
-                    <b:widget id='BlogArchive1' locked='false' title='블로그 보관함' type='BlogArchive' visible='true'>
-                        <b:includable id='main'>
-                            <b:if cond='data:title != &quot;&quot;'>
-                                <h2><data:title/></h2>
-                            </b:if>
-                            <div class='widget-content'>
-                                <div id='ArchiveList'>
-                                    <div expr:id='data:widget.instanceId + &quot;_ArchiveList&quot;'>
-                                        <b:include cond='data:style == &quot;HIERARCHY&quot;' data='data' name='interval'/>
-                                        <b:include cond='data:style == &quot;FLAT&quot;' data='data' name='flat'/>
-                                        <b:include cond='data:style == &quot;MENU&quot;' data='data' name='menu'/>
-                                    </div>
-                                </div>
-                                <b:include name='quickedit'/>
-                            </div>
-                        </b:includable>
-                        <b:includable id='flat' var='data'>
-                            <ul class='flat'>
-                                <b:loop values='data:data' var='i'>
-                                    <li class='archivedate'>
-                                        <a expr:href='data:i.url'><data:i.name/></a> (<data:i.post-count/>)
-                                    </li>
-                                </b:loop>
-                            </ul>
-                        </b:includable>
-                        <b:includable id='interval' var='intervalData'>
-                            <b:loop values='data:intervalData' var='interval'>
-                                <ul class='hierarchy'>
-                                    <li expr:class='&quot;archivedate &quot; + data:interval.expclass'>
-                                        <b:include cond='data:interval.toggleId' data='interval' name='toggle'/>
-                                        <a class='post-count-link' expr:href='data:interval.url'>
-                                            <data:interval.name/>
-                                        </a>
-                                        <span class='post-count' dir='ltr'>(<data:interval.post-count/>)</span>
-                                        <b:include cond='data:interval.data' data='interval.data' name='interval'/>
-                                        <b:include cond='data:interval.posts' data='interval.posts' name='posts'/>
-                                    </li>
-                                </ul>
-                            </b:loop>
-                        </b:includable>
-                        <b:includable id='menu' var='data'>
-                            <select expr:id='data:widget.instanceId + &quot;_ArchiveMenu&quot;'>
-                                <option value=''><data:title/></option>
-                                <b:loop values='data:data' var='i'>
-                                    <option expr:value='data:i.url'><data:i.name/> (<data:i.post-count/>)</option>
-                                </b:loop>
-                            </select>
-                        </b:includable>
-                        <b:includable id='posts' var='posts'>
-                            <ul class='posts'>
-                                <b:loop values='data:posts' var='post'>
-                                    <li><a expr:href='data:post.url'><data:post.title/></a></li>
-                                </b:loop>
-                            </ul>
-                        </b:includable>
-                        <b:includable id='toggle' var='interval'>
-                            <a class='toggle' href='javascript:void(0)'>
-    <span expr:class='&quot;zippy&quot; + (data:interval.expclass == &quot;expanded&quot; ? &quot; toggle-open&quot; : &quot;&quot;)'>
-      <b:if cond='data:interval.expclass == &quot;expanded&quot;'>
-        &#9660;&#160;
-      <b:elseif cond='data:blog.languageDirection == &quot;rtl&quot;'/>
-        &#9668;&#160;
-      <b:else/>
-        &#9658;&#160;
-      </b:if>
-    </span>
-                            </a>
-                        </b:includable>
-                    </b:widget>
-                    <b:widget id='Label1' locked='false' title='카테고리' type='Label' visible='true'>
+                    <b:widget id='Label1' locked='false' title='카테고리' type='Label' version='1' visible='true'>
                         <b:includable id='main'>
                             <b:if cond='data:title != &quot;&quot;'>
                                 <h2><data:title/></h2>
@@ -3468,7 +3456,7 @@
                             </div>
                         </b:includable>
                     </b:widget>
-                    <b:widget id='AdSense4' locked='false' title='' type='AdSense' visible='true'>
+                    <b:widget id='AdSense4' locked='false' title='' type='AdSense' version='1' visible='true'>
                         <b:includable id='main'>
                             <div class='widget-content'>
                                 <data:adCode/>
@@ -3476,7 +3464,7 @@
                             </div>
                         </b:includable>
                     </b:widget>
-                    <b:widget id='AdSense6' locked='false' title='' type='AdSense' visible='true'>
+                    <b:widget id='AdSense6' locked='false' title='' type='AdSense' version='1' visible='true'>
                         <b:includable id='main'>
                             <div class='widget-content'>
                                 <data:adCode/>
@@ -3484,7 +3472,7 @@
                             </div>
                         </b:includable>
                     </b:widget>
-                    <b:widget id='AdSense5' locked='false' title='' type='AdSense' visible='true'>
+                    <b:widget id='AdSense5' locked='false' title='' type='AdSense' version='1' visible='true'>
                         <b:includable id='main'>
                             <div class='widget-content'>
                                 <data:adCode/>
@@ -3504,7 +3492,7 @@
     <div class='clear'/>
 
     <b:section class='banner2 section' id='banner2' maxwidgets='1' showaddelement='yes'>
-        <b:widget id='AdSense7' locked='false' title='' type='AdSense' visible='true'>
+        <b:widget id='AdSense7' locked='false' title='' type='AdSense' version='1' visible='true'>
             <b:includable id='main'>
                 <div class='widget-content'>
                     <data:adCode/>
@@ -3562,7 +3550,7 @@
                 </div>
                 <div class='footer-widget' id='footx2'>
                     <b:section class='footer' id='footer2'>
-                        <b:widget id='PopularPosts3' locked='false' title='가장 많이 본 글' type='PopularPosts' visible='true'>
+                        <b:widget id='PopularPosts3' locked='false' title='가장 많이 본 글' type='PopularPosts' version='1' visible='true'>
                             <b:includable id='main'>
                                 <b:if cond='data:title != &quot;&quot;'><h2><data:title/></h2></b:if>
                                 <div class='widget-content popular-posts'>
@@ -3608,7 +3596,7 @@
                 </div>
                 <div class='footer-widget' id='footx3'>
                     <b:section class='footer' id='footer3'>
-                        <b:widget id='AdSense8' locked='false' title='' type='AdSense' visible='true'>
+                        <b:widget id='AdSense8' locked='false' title='' type='AdSense' version='1' visible='true'>
                             <b:includable id='main'>
                                 <div class='widget-content'>
                                     <data:adCode/>
@@ -3616,7 +3604,7 @@
                                 </div>
                             </b:includable>
                         </b:widget>
-                        <b:widget id='AdSense9' locked='false' title='' type='AdSense' visible='true'>
+                        <b:widget id='AdSense9' locked='false' title='' type='AdSense' version='1' visible='true'>
                             <b:includable id='main'>
                                 <div class='widget-content'>
                                     <data:adCode/>
@@ -3624,7 +3612,7 @@
                                 </div>
                             </b:includable>
                         </b:widget>
-                        <b:widget id='AdSense10' locked='false' title='' type='AdSense' visible='true'>
+                        <b:widget id='AdSense10' locked='false' title='' type='AdSense' version='1' visible='true'>
                             <b:includable id='main'>
                                 <div class='widget-content'>
                                     <data:adCode/>
