@@ -58,7 +58,7 @@
         <b:else/></b:if>
     <link href='/favicon.ico' rel='icon' type='image/x-icon'/>
     <link href='https://plus.google.com/xxxxx/posts' rel='publisher'/>
-    <link href='https://aboutme.google.com/?referer=gplus' rel='author'/>
+    <link href='https://plus.google.com/xxxxx/about' rel='author'/>
     <link href='https://plus.google.com/xxxxx' rel='me'/>
     <meta content='xxxxx' name='google-site-verification'/>
     <meta content='xxxxx' name='msvalidate.01'/>
@@ -270,6 +270,7 @@
         #content-wrapper { border:1px solid #e9e9e9; border-radius:5px; margin:10px auto; padding:0 0; word-wrap:break-word; }
         #content-wrapper .banner .widget { padding:0; }
         #content-wrapper .banner .widget ins { vertical-align:top; }
+
 
         /* CSS Header Wrapper */
         #header-wrapper { margin: -20px -20px 0; padding: 10px 30px 0; overflow:hidden; }
@@ -619,8 +620,18 @@
         .social-inner .fa-pinterest {background:#cb2027!important;}
 
         .sidebar2 .widget.AdSense { text-align:center; }
+
         .sidebar2 .widget.Translate { box-shadow:none; border:0; }
         .sidebar2 .widget.Translate h2.title { display:none; }
+
+        .sidebar2 .widget.CustomSearch h2.title { height:auto; line-height:18px; padding:10px 20px 10px; margin:0; }
+        .sidebar2 .widget.CustomSearch .widget-content { padding:10px 10px 10px 0; }
+        .sidebar2 .widget.CustomSearch .widget-content form.gsc-search-box { margin:0; }
+        .sidebar2 .widget.CustomSearch .widget-content table.gsc-search-box { margin:0; }
+        .sidebar2 .widget.CustomSearch .widget-content table.gsc-search-box td.gsc-input { padding:5px 12px 5px 10px; }
+        .sidebar2 .widget.CustomSearch .widget-content input.gsc-input { border:0; line-height:30px; padding:0 10px; background-color:#eeeeee; border-radius:5px; width:80%; }
+        .sidebar2 .widget.CustomSearch .widget-content input.gsc-input:hover { background-color:#f2f2f2; }
+
 
         /* CSS Subscribe Box */
         #subscribe-box {width:auto;height:auto;background-color:#fff;}
@@ -3868,13 +3879,13 @@
 <!-- // Pretty Printing -->
 
 <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (function(i,s,o,g,r,a,m){i[&#39;GoogleAnalyticsObject&#39;]=r;i[r]=i[r]||function(){
                 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
             m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    })(window,document,&#39;script&#39;,&#39;//www.google-analytics.com/analytics.js&#39;,&#39;ga&#39;);
 
-    ga('create', 'UA-30765240-1', 'auto');
-    ga('send', 'pageview');
+    ga(&#39;create&#39;, &#39;UA-30765240-1&#39;, &#39;auto&#39;);
+    ga(&#39;send&#39;, &#39;pageview&#39;);
 
 </script>
 </body>
